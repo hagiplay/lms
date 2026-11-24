@@ -1,7 +1,8 @@
 import { test } from "@playwright/test";
-import { expectNoSeriousA11yViolations, itemId, login } from "./helpers";
+import { expectNoSeriousA11yViolations, itemId, login, reseed } from "./helpers";
 
 test.describe.configure({ mode: "serial" });
+test.beforeAll(reseed);
 
 for (const scheme of ["light", "dark"] as const) {
   test(`member pages have no serious a11y violations (${scheme})`, async ({ page }) => {

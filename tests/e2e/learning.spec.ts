@@ -1,8 +1,9 @@
 import { expect, test } from "@playwright/test";
 import { createHmac } from "node:crypto";
-import { expectNoSeriousA11yViolations, itemId, login } from "./helpers";
+import { expectNoSeriousA11yViolations, itemId, login, reseed } from "./helpers";
 
 test.describe.configure({ mode: "serial" });
+test.beforeAll(reseed);
 
 test("dashboard → continue → mark lesson complete", async ({ page }) => {
   await login(page, /נועה/);
