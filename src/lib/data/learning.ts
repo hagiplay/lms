@@ -74,7 +74,6 @@ export async function touchItem(user: U, itemId: string) {
 export async function getItemDetails(user: U, itemId: string) {
   const a = await authorizeItem(user, itemId);
   if (!a) return null;
-  const { item } = a;
   const [lesson] = await db.select().from(s.lessonContents).where(eq(s.lessonContents.itemId, itemId));
   const [quiz] = await db.select().from(s.quizzes).where(eq(s.quizzes.itemId, itemId));
   const [assignment] = await db.select().from(s.assignments).where(eq(s.assignments.itemId, itemId));

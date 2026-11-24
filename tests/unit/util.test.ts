@@ -94,3 +94,16 @@ describe("payment webhook schema", () => {
     expect(paymentEventSchema.safeParse({ id: "1", type: "payment.succeeded", email: "bad", programSlug: "x" }).success).toBe(false);
   });
 });
+
+import { dateToIsraelLocal, israelLocalToDate } from "@/lib/domain/format";
+describe("Israel local time", () => {
+  it("winter (UTC+2) and summer (UTC+3)", () => {
+    expect(israelLocalToDate("2026-11-25T19:00").toISOString()).toBe("2026-11-25T17:00:00.000Z");
+    expect(israelLocalToDate("2026-07-01T19:00").toISOString()).toBe("2026-07-01T16:00:00.000Z");
+  });
+  it("round-trips and rejects garbage", () => {
+    expect(dateToIsraelLocal(new Date("2026-11-25T17:00:00Z"))).toBe("2026-11-25T19:00");
+    expect(dateToIsraelLocal(israelLocalToDate("2026-03-29T12:30"))).toBe("2026-03-29T12:30");
+    expect(Number.isNaN(israelLocalToDate("nope").getTime())).toBe(true);
+  });
+});

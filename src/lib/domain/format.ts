@@ -76,3 +76,29 @@ export function formatBytes(n: number): string {
   if (n < 1024 * 1024) return `${Math.round(n / 1024)} KB`;
   return `${(n / 1024 / 1024).toFixed(1)} MB`;
 }
+
+/** Offset (ms) of Asia/Jerusalem from UTC at a given instant (handles DST). */
+function israelOffsetMs(at: number): number {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-US", { timeZone: TZ, hourCycle: "h23", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" })
+      .formatToParts(new Date(at))
+      .map((p) => [p.type, p.value]),
+  );
+  const asUtc = Date.UTC(+parts.year!, +parts.month! - 1, +parts.day!, +parts.hour!, +parts.minute!, +parts.second!);
+  return asUtc - Math.floor(at / 1000) * 1000;
+}
+
+/** "2026-11-25T19:00" (an <input type="datetime-local"> value, Israel wall time) → Date. */
+export function israelLocalToDate(value: string): Date {
+  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(value.trim());
+  if (!m) return new Date(NaN);
+  const wall = Date.UTC(+m[1]!, +m[2]! - 1, +m[3]!, +m[4]!, +m[5]!);
+  let utc = wall - israelOffsetMs(wall);
+  utc = wall - israelOffsetMs(utc); // second pass settles DST edges
+  return new Date(utc);
+}
+
+/** Date → "YYYY-MM-DDTHH:mm" in Israel wall time, for datetime-local inputs. */
+export function dateToIsraelLocal(d: Date): string {
+  return new Date(d.getTime() + israelOffsetMs(d.getTime())).toISOString().slice(0, 16);
+}
