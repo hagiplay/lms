@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useId, useRef, type ReactNode } from "react";
+import { useEffect, useId, useRef, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
 export type TabDef = { key: string; label: string; count?: number; content: ReactNode };
@@ -14,6 +14,12 @@ export function Tabs({ tabs, defaultKey }: { tabs: TabDef[]; defaultKey: string 
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
   const requested = params.get("tab");
   const active = tabs.some((t) => t.key === requested) ? requested! : defaultKey;
+
+  // On narrow screens the tab bar scrolls; keep the active tab visible (e.g. deep links to ?tab=discussion).
+  useEffect(() => {
+    refs.current[tabs.findIndex((t) => t.key === active)]?.scrollIntoView({ block: "nearest", inline: "nearest" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active]);
 
   const select = (key: string, focus = false) => {
     const sp = new URLSearchParams(params);

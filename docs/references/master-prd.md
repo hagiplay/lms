@@ -393,7 +393,7 @@ console.log('הועתק ללוח:', Object.keys(vars).length, 'משתנים');
 | `--surface` | `#FFFFFF` | | כרטיסים, Sidebar, Header | A + B |
 | `--surface-muted` | `#EFF3F4` | | כרטיס מפגש, אזורים משניים | B |
 | `--text` | `#0F172A` | 17.06 על bg | טקסט ראשי (לא שחור מלא) | A, כהה יותר |
-| `--text-muted` | `#64748B` | 4.76 / 4.55 | טקסט משני, מ-14px | A |
+| `--text-muted` | `#5B677A` | 4.86 ומעלה על כל רקע בהיר | טקסט משני | A, כהה יותר (עודכן במימוש: `#64748B` נכשל על `surface-muted`, 4.26) |
 | `--border` | `#E2E8F0` | | מפרידים דקורטיביים | A |
 | `--border-input` | `#64748B` | 4.76 | שדות קלט | חדש |
 | `--primary` | `#01798A` | 5.12 (לבן עליו) | מותג, פריט פעיל, כפתור ראשי, קישורים, פס התקדמות | **B** |
@@ -461,7 +461,7 @@ console.log('הועתק ללוח:', Object.keys(vars).length, 'משתנים');
   --radius-card: 16px; --radius-btn: 12px; --radius-pill: 9999px;
 
   --bg: #F8FAFC; --surface: #FFFFFF; --surface-muted: #EFF3F4;
-  --text: #0F172A; --text-muted: #64748B;
+  --text: #0F172A; --text-muted: #5B677A;
   --border: #E2E8F0; --border-input: #64748B;
 
   --primary: #01798A; --primary-hover: #00616F; --on-primary: #FFFFFF;
